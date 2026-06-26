@@ -228,11 +228,13 @@ else:
     # 選択肢が選ばれた場合
     if selected_option != "（選択してください）":
         with st.spinner("思考中…"):
+            time.sleep(60)
             process_message(selected_option)
     
     # 自由にチャットが入力された場合
     if free_input:
         with st.spinner("思考中…"):
+            time.sleep(60)
             # この中でAPI呼び出しを行う
             process_message(free_input)
 
