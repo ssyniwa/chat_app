@@ -227,8 +227,8 @@ else:
     
     # 選択肢が選ばれた場合
     if selected_option != "（選択してください）":
-        # 一度selectboxをリセットする工夫が必要です（詳細は後述）
-        process_message(selected_option)
+        with st.spinner("思考中…"):
+            process_message(selected_option)
     
     # 自由にチャットが入力された場合
     if free_input:
