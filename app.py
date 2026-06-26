@@ -9,24 +9,7 @@ import json
 # --- ページ設定 ---
 st.set_page_config(page_title="異界通信アプリ", page_icon="🔮", layout="centered")
 
-# --- Google Sheets 接続設定 ---
-def get_gsheet_client():
-    # secrets.tomlからJSONを取得
-    creds_dict = json.loads(st.secrets["GCP_SERVICE_ACCOUNT"])
-    scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
-    creds = ServiceAccountCredentials.from_json_keyfile_dict(creds_dict, scope)
-    client = gspread.authorize(creds)
-    return client.open_by_url(st.secrets["SHEET_URL"]).sheet1
 
-# --- 関数: 履歴の保存と読込 ---
-def save_to_sheets(user_id, char_name, role, content):
-    sheet = get_gsheet_client()
-    sheet.append_row([user_id, char_name, role, content, datetime.now().strftime("%Y-%m-%d %H:%M:%S")])
-
-def load_history(user_id):
-    sheet = get_gsheet_client()
-    data = sheet.get_all_records()
-    return [row for row in data if row['user_id'] == user_id]
 
 
 
@@ -53,7 +36,24 @@ try:
     genai.configure(api_key=st.secrets["GEMINI_API_KEY"])
 except:
     st.warning("APIキーが設定されていません。.streamlit/secrets.tomlを確認してください。")
+# --- Google Sheets 接続設定 ---
+def get_gsheet_client():
+    # secrets.tomlからJSONを取得
+    creds_dict = json.loads(st.secrets["GCP_SERVICE_ACCOUNT"])
+    scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
+    creds = ServiceAccountCredentials.from_json_keyfile_dict(creds_dict, scope)
+    client = gspread.authorize(creds)
+    return client.open_by_url(st.secrets["SHEET_URL"]).sheet1
 
+# --- 関数: 履歴の保存と読込 ---
+def save_to_sheets(user_id, char_name, role, content):
+    sheet = get_gsheet_client()
+    sheet.append_row([user_id, char_name, role, content, datetime.now().strftime("%Y-%m-%d %H:%M:%S")])
+
+def load_history(user_id):
+    sheet = get_gsheet_client()
+    data = sheet.get_all_records()
+    return [row for row in data if row['user_id'] == user_id]
 
 
 # --- 関数: 履歴の保存と読込 ---
