@@ -38,8 +38,20 @@ except:
     st.warning("APIキーが設定されていません。.streamlit/secrets.tomlを確認してください。")
 # --- Google Sheets 接続設定 ---
 def get_gsheet_client():
-    # secrets.tomlからJSONを取得
-    creds_dict = json.loads(st.secrets["GCP_SERVICE_ACCOUNT"])
+    # secretsから個別に取得して辞書を作成
+    creds_dict = {
+        "type": "service_account",
+        "project_id": st.secrets["GCP_PROJECT_ID"],
+        "private_key_id": st.secrets["GCP_PRIVATE_KEY_ID"],
+        "private_key": st.secrets["GCP_PRIVATE_KEY"], # ここに改行を含んだ状態で渡す
+        "client_email": st.secrets["GCP_CLIENT_EMAIL"],
+        "client_id": st.secrets["GCP_CLIENT_ID"],
+        "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+        "token_uri": "https://oauth2.googleapis.com/token",
+        "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+        "client_x509_cert_url": f"https://www.googleapis.com/robot/v1/metadata/x509/{st.secrets['GCP_CLIENT_EMAIL']}"
+    }
+    
     scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
     creds = ServiceAccountCredentials.from_json_keyfile_dict(creds_dict, scope)
     client = gspread.authorize(creds)
