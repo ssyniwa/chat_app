@@ -107,6 +107,23 @@ def get_ai_response(character_name, user_input):
     
     response = model.generate_content(user_input)
     return response.text
+# --- 処理ロジック ---
+def process_message(user_msg):
+    # ユーザー発言追加
+    st.session_state.chat_history.append({"role": "user", "content": user_msg})
+    
+    # Geminiによる返答生成
+    prompt = f"あなたは{st.session_state.character}です。相手は{st.session_state.user_id}です。以下の問いに、あなたのキャラクター設定を守って答えてください：{selected_option}"
+    
+    
+    ai_msg = get_ai_response(st.session_state.character,selected_option)
+    st.session_state.chat_history.append({"role": "assistant", "content": ai_msg})
+    
+    # スプレッドシートへ保存（非同期または最後にまとめて行うのが理想）
+    save_to_sheets(st.session_state.user_id, st.session_state.character, "user", selected_option)
+    save_to_sheets(st.session_state.user_id, st.session_state.character, "assistant", ai_msg)
+    
+    st.rerun()
 
 # --- 画面遷移ロジック ---
 
@@ -157,29 +174,24 @@ else:
 
     # 選択肢ボタン
     options = {
-        "オニキス": ["「もしも太陽が消えたら、魔界はどうなる？」", "「そっちの食べ物を送ってくれないか？」", "「少し疲れた、癒やしてくれ」"],
-        "セバスチャン": ["「この世界のAIの未来を予測してくれ」", "「異次元の効率的な整理術は？」", "「今日の通信はここまでにしよう」"],
-        "フィーナ": ["ちょっとした家事を楽にする魔法を教えて！", "最強の魔法や術式レベルについて教えて！","図書館以外では何をしてるの？"]
+        "オニキス": ["（選択してください）","「もしも太陽が消えたら、魔界はどうなる？」", "「そっちの食べ物を送ってくれないか？」", "「少し疲れた、癒やしてくれ」"],
+        "セバスチャン": ["（選択してください）","「この世界のAIの未来を予測してくれ」", "「異次元の効率的な整理術は？」", "「今日の通信はここまでにしよう」"],
+        "フィーナ": ["（選択してください）","ちょっとした家事を楽にする魔法を教えて！", "最強の魔法や術式レベルについて教えて！","図書館以外では何をしてるの？"]
     }
     
-    selected_option = st.selectbox("送信内容を選択:", options[st.session_state.character])
+    selected_option = st.selectbox("クイック選択:", char_options.get(st.session_state.character, ["（選択してください）"]))
+
+    # 2. 自由入力欄
+    free_input = st.chat_input("自由に話しかける...")
     
-    if st.button("信号を送信"):
-        # ユーザー発言追加
-        st.session_state.chat_history.append({"role": "user", "content": selected_option})
-        
-        # Geminiによる返答生成
-        prompt = f"あなたは{st.session_state.character}です。相手は{st.session_state.user_id}です。以下の問いに、あなたのキャラクター設定を守って答えてください：{selected_option}"
-        
-        
-        ai_msg = get_ai_response(st.session_state.character,selected_option)
-        st.session_state.chat_history.append({"role": "assistant", "content": ai_msg})
-        
-        # スプレッドシートへ保存（非同期または最後にまとめて行うのが理想）
-        save_to_sheets(st.session_state.user_id, st.session_state.character, "user", selected_option)
-        save_to_sheets(st.session_state.user_id, st.session_state.character, "assistant", ai_msg)
-        
-        st.rerun()
+    # 選択肢が選ばれた場合
+    if selected_option != "（選択してください）":
+        # 一度selectboxをリセットする工夫が必要です（詳細は後述）
+        process_message(selected_option)
+    
+    # 自由にチャットが入力された場合
+    if free_input:
+        process_message(free_input)
 
     if st.sidebar.button("通信を終了（ログアウト）"):
         st.session_state.clear()
