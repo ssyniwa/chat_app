@@ -1,4 +1,4 @@
-streamlit>=1.0.0
-streamlit-gsheets
+streamlit
+git+https://github.com/streamlit/streamlit-gsheets.git
 google-generativeai
 pandas
