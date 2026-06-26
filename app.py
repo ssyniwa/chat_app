@@ -191,7 +191,9 @@ else:
     
     # 自由にチャットが入力された場合
     if free_input:
-        process_message(free_input)
+        with st.spinner("思考中…"):
+            # この中でAPI呼び出しを行う
+            process_message(free_input)
 
     if st.sidebar.button("通信を終了（ログアウト）"):
         st.session_state.clear()
