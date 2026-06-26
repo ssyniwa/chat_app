@@ -176,14 +176,14 @@ elif st.session_state.character is None:
     chars = ["オニキス", "セバスチャン", "フィーナ", "エリュア"]
     
     # キャラクターを横並びに表示
-    cols = st.columns(len(CHARACTERS))
-    
+    cols = st.columns(3)
     for i, (name, info) in enumerate(CHARACTERS.items()):
+       
         with cols[i]:
             # 画像を表示（widthでサイズを調整）
-            st.image(info["img"], width=100)
+            st.image(info["img"], use_container_width=True)
             # ボタンを押すとキャラ選択
-            if st.button(f"{name}", use_container_width=True):
+            if cols[i % 3].button(f"{name}", use_container_width=True):
                 st.session_state.character = name
                 st.rerun()
     
