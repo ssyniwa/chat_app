@@ -5,7 +5,7 @@ import google.generativeai as genai
 import pandas as pd
 from datetime import datetime
 import json
-
+import time
 # --- ページ設定 ---
 st.set_page_config(page_title="異界通信アプリ", page_icon="🔮", layout="centered")
 
