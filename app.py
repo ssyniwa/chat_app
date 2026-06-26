@@ -127,7 +127,7 @@ else:
         
         # Geminiによる返答生成
         prompt = f"あなたは{st.session_state.character}です。相手は{st.session_state.user_id}です。以下の問いに、あなたのキャラクター設定を守って答えてください：{selected_option}"
-        model = genai.GenerativeModel("gemini-3.1-flash") # 3.1 FlashがGAになればここを書き換え
+        model = genai.GenerativeModel("gemini-3.5-flash") # 3.1 FlashがGAになればここを書き換え
         response = model.generate_content(prompt)
         
         ai_msg = response.text
