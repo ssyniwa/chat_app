@@ -181,7 +181,7 @@ elif st.session_state.character is None:
        
         with cols[i]:
             # 画像を表示（widthでサイズを調整）
-            st.image(info["img"], use_container_width=True)
+            cols[i % 3].image(info["img"], use_container_width=True)
             # ボタンを押すとキャラ選択
             if cols[i % 3].button(f"{name}", use_container_width=True):
                 st.session_state.character = name
