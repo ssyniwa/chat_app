@@ -54,8 +54,7 @@ try:
 except:
     st.warning("APIキーが設定されていません。.streamlit/secrets.tomlを確認してください。")
 
-# Google Sheets接続
-conn = st.connection("chat", type=GSheetsConnection)
+
 
 # --- 関数: 履歴の保存と読込 ---
 
