@@ -1,11 +1,34 @@
 import streamlit as st
+import gspread
+from oauth2client.service_account import ServiceAccountCredentials
 import google.generativeai as genai
-from streamlit_gsheets import GSheetsConnection
 import pandas as pd
 from datetime import datetime
+import json
 
 # --- ページ設定 ---
 st.set_page_config(page_title="異界通信アプリ", page_icon="🔮", layout="centered")
+
+# --- Google Sheets 接続設定 ---
+def get_gsheet_client():
+    # secrets.tomlからJSONを取得
+    creds_dict = json.loads(st.secrets["GCP_SERVICE_ACCOUNT"])
+    scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
+    creds = ServiceAccountCredentials.from_json_keyfile_dict(creds_dict, scope)
+    client = gspread.authorize(creds)
+    return client.open_by_url(st.secrets["SHEET_URL"]).sheet1
+
+# --- 関数: 履歴の保存と読込 ---
+def save_to_sheets(user_id, char_name, role, content):
+    sheet = get_gsheet_client()
+    sheet.append_row([user_id, char_name, role, content, datetime.now().strftime("%Y-%m-%d %H:%M:%S")])
+
+def load_history(user_id):
+    sheet = get_gsheet_client()
+    data = sheet.get_all_records()
+    return [row for row in data if row['user_id'] == user_id]
+
+
 
 # カスタムCSSでUIを洗練
 st.markdown("""
@@ -35,26 +58,7 @@ except:
 conn = st.connection("chat", type=GSheetsConnection)
 
 # --- 関数: 履歴の保存と読込 ---
-def save_to_sheets(user_id, char_name, role, content):
-    # 既存データを読み込んで追加（簡易版。本来はappend専用メソッドが望ましい）
-    new_data = pd.DataFrame([{
-        "user_id": user_id,
-        "character": char_name,
-        "role": role,
-        "content": content,
-        "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    }])
-    # ここでは既存シートに追記するロジック（環境に合わせて調整が必要）
-    # conn.create(data=new_data) # streamlit-gsheetsの書き込み仕様に準拠
-    pass 
 
-def load_history(user_id):
-    try:
-        df = conn.read()
-        user_df = df[df['user_id'] == user_id]
-        return user_df.to_dict('records')
-    except:
-        return []
 
 # --- 画面遷移ロジック ---
 
