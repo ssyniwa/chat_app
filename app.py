@@ -179,7 +179,7 @@ else:
         "フィーナ": ["（選択してください）","ちょっとした家事を楽にする魔法を教えて！", "最強の魔法や術式レベルについて教えて！","図書館以外では何をしてるの？"]
     }
     
-    selected_option = st.selectbox("クイック選択:", char_options.get(st.session_state.character, ["（選択してください）"]))
+    selected_option = st.selectbox("クイック選択:", options.get(st.session_state.character, ["（選択してください）"]))
 
     # 2. 自由入力欄
     free_input = st.chat_input("自由に話しかける...")
