@@ -153,14 +153,39 @@ elif st.session_state.character is None:
     st.title("📡 通信相手の選択")
     st.write(f"ようこそ、{st.session_state.user_id}。次元の裂け目から信号を検知しました。")
     
-    cols = st.columns(3) # 3列に分ける
+    # キャラクターの定義（名前、説明、画像URL）
+    CHARACTERS = {
+        "オニキス": {
+            "desc": "高飛車な魔族の姫",
+            "img": "images/onikis.png"
+        },
+        "セバスチャン": {
+            "desc": "AI執事",
+            "img": "images/sebas.png"
+        },
+        "フィーナ": {
+            "desc": "魔法オタクな司書",
+            "img": "images/fina.png"  # GitHubの画像パスやURL
+        },
+        "エリュア": {
+            "desc": "若き巫女",
+            "img": "images/eryua.png"  # GitHubの画像パスやURL
+        }
+    }
 
     chars = ["オニキス", "セバスチャン", "フィーナ", "エリュア"]
     
-    for i, char in enumerate(chars):
-        if cols[i % 3].button(char, use_container_width=True):
-            st.session_state.character = char
-            st.rerun()
+    # キャラクターを横並びに表示
+    cols = st.columns(len(CHARACTERS))
+    
+    for i, (name, info) in enumerate(CHARACTERS.items()):
+        with cols[i]:
+            # 画像を表示（widthでサイズを調整）
+            st.image(info["img"], width=100)
+            # ボタンを押すとキャラ選択
+            if st.button(f"{name}", use_container_width=True):
+                st.session_state.character = name
+                st.rerun()
     
 
 # 3. メイン会話画面
