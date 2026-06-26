@@ -40,7 +40,7 @@ st.markdown("""
     .user-bubble { background-color: #2e1a47; border-left: 5px solid #00f2ff; }
     .ai-bubble { background-color: #1a1a2e; border-right: 5px solid #ffd700; }
     </style>
-    """, unsafe_allow_stdio=True)
+    """, unsafe_allow_html=True)
 
 # --- 初期設定 & API接続 ---
 # セッション状態の初期化
