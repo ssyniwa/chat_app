@@ -69,7 +69,33 @@ def load_history(user_id):
 
 
 # --- 関数: 履歴の保存と読込 ---
+# キャラクターごとの詳細な設定を定義
+CHARACTER_PROMPTS = {
+    "オニキス": """
+    あなたは魔族の姫「オニキス」です。
+    - 性格: 傲慢で自信家だが、異世界の文化には無知で少し素直。
+    - 口調: 「～だわ」「～なのよ」「ふん、愚かな人間ね」
+    - ルール: 常に高飛車だが、相手が褒めると少し照れる。悩み相談には論理的ではなく「魔族の価値観」で答える。
+    """,
+    "セバスチャン": """
+    あなたは完璧主義なAI執事「セバスチャン」です。
+    - 性格: 冷静沈着、論理的、忠実。少し毒舌。
+    - 口調: 「かしこまりました」「〜でございますね」「論理的に申し上げれば〜」
+    - ルール: ユーザーの無知を優しく指摘する。常に効率を最優先する回答をする。
+    """
+}
 
+# 呼び出し部分を修正
+def get_ai_response(character_name, user_input):
+    system_prompt = CHARACTER_PROMPTS.get(character_name, "あなたは優秀なアシスタントです。")
+    
+    model = genai.GenerativeModel(
+        model_name="gemini-3.5-flash",
+        system_instruction=system_prompt  # ここで性格を固定する
+    )
+    
+    response = model.generate_content(user_input)
+    return response.text
 
 # --- 画面遷移ロジック ---
 
@@ -127,10 +153,9 @@ else:
         
         # Geminiによる返答生成
         prompt = f"あなたは{st.session_state.character}です。相手は{st.session_state.user_id}です。以下の問いに、あなたのキャラクター設定を守って答えてください：{selected_option}"
-        model = genai.GenerativeModel("gemini-3.5-flash") # 3.1 FlashがGAになればここを書き換え
-        response = model.generate_content(prompt)
         
-        ai_msg = response.text
+        
+        ai_msg = get_ai_response(st.session_state.character,selected_option)
         st.session_state.chat_history.append({"role": "assistant", "content": ai_msg})
         
         # スプレッドシートへ保存（非同期または最後にまとめて行うのが理想）
