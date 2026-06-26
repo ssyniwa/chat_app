@@ -125,7 +125,7 @@ elif st.session_state.character is None:
             st.session_state.character = "オニキス"
             st.rerun()
     with col2:
-        st.image("https://placehold.co/300x400/1A1A2E/FFD700?text=Sebastian", caption="AI執事セバスチャン")
+        st.image("images/sebas", caption="AI執事セバスチャン")
         if st.button("セバスチャンと通信"):
             st.session_state.character = "セバスチャン"
             st.rerun()
