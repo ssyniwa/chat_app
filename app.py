@@ -119,7 +119,7 @@ def get_ai_response(character_name, user_input):
     system_prompt = CHARACTER_PROMPTS.get(character_name, "あなたは優秀なアシスタントです。")
     
     model = genai.GenerativeModel(
-        model_name="gemini-3.5-flash",
+        model_name="gemini-3.1-flash-lite",
         system_instruction=system_prompt  # ここで性格を固定する
     )
     
