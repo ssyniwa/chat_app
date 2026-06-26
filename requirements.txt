@@ -1,4 +1,5 @@
 streamlit
-git+https://github.com/streamlit/streamlit-gsheets.git
+gspread
+oauth2client
 google-generativeai
 pandas
