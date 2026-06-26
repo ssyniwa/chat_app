@@ -116,7 +116,7 @@ def process_message(user_msg):
     prompt = f"あなたは{st.session_state.character}です。相手は{st.session_state.user_id}です。以下の問いに、あなたのキャラクター設定を守って答えてください：{selected_option}"
     
     
-    ai_msg = get_ai_response(st.session_state.character,selected_option)
+    ai_msg = get_ai_response(st.session_state.character,user_msg)
     st.session_state.chat_history.append({"role": "assistant", "content": ai_msg})
     
     # スプレッドシートへ保存（非同期または最後にまとめて行うのが理想）
