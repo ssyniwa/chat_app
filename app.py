@@ -226,7 +226,7 @@ elif st.session_state.character is None:
     cols = st.columns(3)
     for i, (name, info) in enumerate(CHARACTERS.items()):
        
-        with cols[i]:
+        with cols[i % 3]:
             # 画像を表示（widthでサイズを調整）
             cols[i % 3].image(info["img"], use_container_width=True)
             # ボタンを押すとキャラ選択
