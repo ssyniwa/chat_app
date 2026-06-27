@@ -248,7 +248,7 @@ elif st.session_state.character is None:
             "img": "images/varu.png"  # GitHubの画像パスやURL
         },
         "貞子": {
-            "desc": "バズりたい怨霊貞子",
+            "desc": "バズりたい怨霊",
             "img": "images/sadako.png"  # GitHubの画像パスやURL
         }
     }
