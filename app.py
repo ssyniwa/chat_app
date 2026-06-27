@@ -209,7 +209,7 @@ else:
     
     # チャット履歴の表示
     for chat in st.session_state.chat_history:
-        if chat["character"] == st.session_state.character:
+        if chat["char_name"] == st.session_state.character:
             role_class = "user-bubble" if chat["role"] == "user" else "ai-bubble"
             st.markdown(f'<div class="chat-bubble {role_class}">{chat["content"]}</div>', unsafe_allow_html=True)
 
