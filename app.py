@@ -223,7 +223,7 @@ elif st.session_state.character is None:
     chars = ["オニキス", "セバスチャン", "フィーナ", "エリュア", "アリア", "ヴァレリア", "セレス"]
     
     # キャラクターを横並びに表示
-    cols = st.columns(len(CHARACTERS))
+    cols = st.columns(3)
     for i, (name, info) in enumerate(CHARACTERS.items()):
        
         with cols[i]:
