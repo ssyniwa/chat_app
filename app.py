@@ -127,18 +127,29 @@ def get_ai_response(character_name, user_input):
     return response.text
 # --- 処理ロジック ---
 def process_message(user_msg):
-    # ユーザー発言追加
-    st.session_state.chat_history.append({"role": "user", "content": user_msg})
+    # ユーザー発言追加（char_name を保存するように変更）
+    st.session_state.chat_history.append({
+        "role": "user", 
+        "content": user_msg, 
+        "char_name": st.session_state.character
+    })
     
     # Geminiによる返答生成
     prompt = f"あなたは{st.session_state.character}です。相手は{st.session_state.user_id}です。以下の問いに、あなたのキャラクター設定を守って答えてください：{selected_option}"
     
     
-    ai_msg = get_ai_response(st.session_state.character,user_msg)
-    st.session_state.chat_history.append({"role": "assistant", "content": ai_msg})
+    # AIの返答生成
+    ai_msg = get_ai_response(st.session_state.character, user_msg)
     
-    # スプレッドシートへ保存（非同期または最後にまとめて行うのが理想）
-    save_to_sheets(st.session_state.user_id, st.session_state.character, "user", selected_option)
+    # AI発言追加（char_name を保存するように変更）
+    st.session_state.chat_history.append({
+        "role": "assistant", 
+        "content": ai_msg, 
+        "char_name": st.session_state.character
+    })
+    
+    # スプレッドシート保存などの処理...
+    save_to_sheets(st.session_state.user_id, st.session_state.character, "user", user_msg)
     save_to_sheets(st.session_state.user_id, st.session_state.character, "assistant", ai_msg)
     
     st.rerun()
@@ -209,9 +220,9 @@ else:
     
     # チャット履歴の表示
     for chat in st.session_state.chat_history:
-        #if chat.get("char_name") == st.session_state.character:
-        role_class = "user-bubble" if chat["role"] == "user" else "ai-bubble"
-        st.markdown(f'<div class="chat-bubble {role_class}">{chat["content"]}</div>', unsafe_allow_html=True)
+        if chat.get("char_name") == st.session_state.character:
+            role_class = "user-bubble" if chat["role"] == "user" else "ai-bubble"
+            st.markdown(f'<div class="chat-bubble {role_class}">{chat["content"]}</div>', unsafe_allow_html=True)
 
     # 選択肢ボタン
     options = {
