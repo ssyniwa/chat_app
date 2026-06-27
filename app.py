@@ -167,7 +167,7 @@ elif st.session_state.character is None:
     # キャラクターの定義（名前、説明、画像URL）
     CHARACTERS = {
         "オニキス": {
-            "desc": "高飛車な魔族の姫",
+            "desc": "魔族の姫",
             "img": "images/onikis.png"
         },
         "セバスチャン": {
@@ -175,15 +175,15 @@ elif st.session_state.character is None:
             "img": "images/sebas.png"
         },
         "フィーナ": {
-            "desc": "魔法オタクな司書",
+            "desc": "魔法司書",
             "img": "images/fina.png"  # GitHubの画像パスやURL
         },
         "エリュア": {
-            "desc": "若き巫女",
+            "desc": "甘党巫女",
             "img": "images/eryua.png"  # GitHubの画像パスやURL
         },
         "アリア": {
-            "desc": "大聖堂のシスター",
+            "desc": "妄想シスター",
             "img": "images/aria.png"  # GitHubの画像パスやURL
         }
     }
@@ -198,7 +198,7 @@ elif st.session_state.character is None:
             # 画像を表示（widthでサイズを調整）
             cols[i % 3].image(info["img"], use_container_width=True)
             # ボタンを押すとキャラ選択
-            if cols[i % 3].button(f"{name}", use_container_width=True):
+            if cols[i % 3].button(f"{info["desc"]}:{name}", use_container_width=True):
                 st.session_state.character = name
                 st.rerun()
     
@@ -228,13 +228,13 @@ else:
     # 選択肢が選ばれた場合
     if selected_option != "（選択してください）":
         with st.spinner("思考中…"):
-            time.sleep(60)
+            time.sleep(30)
             process_message(selected_option)
     
     # 自由にチャットが入力された場合
     if free_input:
         with st.spinner("思考中…"):
-            time.sleep(60)
+            time.sleep(30)
             # この中でAPI呼び出しを行う
             process_message(free_input)
 
