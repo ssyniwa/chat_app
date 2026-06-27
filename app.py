@@ -167,7 +167,7 @@ if not st.session_state.logged_in:
             # 履歴の復元
             saved_msgs = load_history(user_id)
             for m in saved_msgs:
-                st.session_state.chat_history.append({"role": m['role'], "content": m['content']})
+                st.session_state.chat_history.append({"role": m['role'], "content": m['content'], "char_name": m['char_name']})
             st.rerun()
 
 # 2. キャラクター選択画面
