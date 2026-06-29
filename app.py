@@ -319,7 +319,7 @@ elif st.session_state.character is None:
         },
         "ルルナ": {
             "desc": "リゾート惑星の深海ガイド",
-            "img": "images/ruruno.png"  # GitHubの画像パスやURL
+            "img": "images/ruruna.png"  # GitHubの画像パスやURL
         }
     }
 
